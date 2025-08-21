@@ -9,6 +9,9 @@ import android.os.Bundle;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.TurboReactPackage;
+import com.facebook.react.module.model.ReactModuleInfo;
+import com.facebook.react.module.model.ReactModuleInfoProvider;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -19,6 +22,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
+
+    public static final String NAME = "LaunchArguments";
 
     private static final long ACTIVITY_WAIT_INTERVAL = 100L;
     private static final int ACTIVITY_WAIT_TRIES = 200;
@@ -32,7 +37,7 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
     @NonNull
     @Override
     public String getName() {
-        return "LaunchArguments";
+        return NAME;
     }
 
     @Nullable
