@@ -10,7 +10,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.example.newarchitecture.MainApplicationReactNativeHost;
-import com.reactnativelauncharguments.LaunchArgumentsPackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          packages.add(new LaunchArgumentsPackage());
+          // packages.add(new LaunchArgumentsPackage());
           return packages;
         }
 
