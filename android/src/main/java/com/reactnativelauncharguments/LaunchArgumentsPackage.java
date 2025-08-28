@@ -1,13 +1,11 @@
 package com.reactnativelauncharguments;
 
 import com.facebook.react.BaseReactPackage;
-import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.TurboReactPackage;
-import com.facebook.react.uimanager.ViewManager;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,7 +15,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class LaunchArgumentsPackage extends TurboReactPackage implements ReactPackage {
+public class LaunchArgumentsPackage extends TurboReactPackage {
 
     @Nullable
     @Override
@@ -49,14 +47,10 @@ public class LaunchArgumentsPackage extends TurboReactPackage implements ReactPa
         };
     }
 
-    // ReactPackage methods for old architecture support
+    // For backwards compatibility with legacy apps
     @Override
     public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
-        return Collections.<NativeModule>singletonList(new LaunchArgumentsModule(reactContext));
-    }
-
-    @Override
-    public List<ViewManager> createViewManagers(@Nonnull ReactApplicationContext reactContext) {
-        return Collections.emptyList();
+        final NativeModule nativeModule = new LaunchArgumentsModule(reactContext);
+        return Collections.singletonList(nativeModule);
     }
 }

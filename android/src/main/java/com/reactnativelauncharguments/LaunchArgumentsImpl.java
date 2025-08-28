@@ -7,21 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.TurboReactPackage;
-import com.facebook.react.module.model.ReactModuleInfo;
-import com.facebook.react.module.model.ReactModuleInfoProvider;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
+public class LaunchArgumentsImpl {
 
     public static final String NAME = "LaunchArguments";
 
@@ -30,18 +23,13 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
 
     private static final String DETOX_LAUNCH_ARGS_KEY = "launchArgs";
 
-    LaunchArgumentsModule(ReactApplicationContext context) {
-        super(context);
-    }
+    private ReactApplicationContext reactContext;
 
-    @NonNull
-    @Override
-    public String getName() {
-        return NAME;
+    public LaunchArgumentsImpl(ReactApplicationContext reactContext) {
+        this.reactContext = reactContext;
     }
 
     @Nullable
-    @Override
     public Map<String, Object> getConstants() {
         // When the app is killed, it doesn't start the activity so no need to wait for it
         if (!isAppKilled()) {
@@ -57,13 +45,6 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
         }};
     }
 
-    /**
-     * Looks like a bug in RN, without it this module is invisible
-     * in NativeModules.
-     */
-    @ReactMethod
-    public void foo() {}
-
     private void waitForActivity() {
         for (int tries = 0; tries < ACTIVITY_WAIT_TRIES && !isActivityReady(); tries++) {
             sleep(ACTIVITY_WAIT_INTERVAL);
@@ -73,7 +54,7 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
     private Map<String, Object> parseIntentExtras() {
         final Map<String, Object> map = new HashMap<>();
 
-        final Activity activity = getCurrentActivity();
+        final Activity activity = reactContext.getCurrentActivity();
         if (activity == null) {
             return map;
         }
@@ -116,7 +97,7 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
     }
 
     private boolean isActivityReady() {
-        return getReactApplicationContext().hasCurrentActivity();
+        return reactContext.hasCurrentActivity();
     }
 
     private static void sleep(long ms) {
@@ -128,14 +109,14 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
     }
 
     private boolean isAppKilled() {
-        ActivityManager activityManager = (ActivityManager) getReactApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = (ActivityManager) reactContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager.getRunningAppProcesses();
 
         if (appProcesses == null) {
             return true; // No processes, app is likely killed
         }
 
-        final String packageName = getReactApplicationContext().getPackageName();
+        final String packageName = reactContext.getPackageName();
         for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
             if (appProcess.processName.equals(packageName)) {
                 // App process is found, app is not killed
