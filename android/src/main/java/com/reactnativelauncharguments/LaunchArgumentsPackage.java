@@ -7,9 +7,7 @@ import com.facebook.react.module.model.ReactModuleInfo;
 import com.facebook.react.module.model.ReactModuleInfoProvider;
 import com.facebook.react.TurboReactPackage;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -45,12 +43,5 @@ public class LaunchArgumentsPackage extends TurboReactPackage {
                     ));
             return moduleInfos;
         };
-    }
-
-    // For backwards compatibility with legacy apps
-    @Override
-    public List<NativeModule> createNativeModules(@Nonnull ReactApplicationContext reactContext) {
-        final NativeModule nativeModule = new LaunchArgumentsModule(reactContext);
-        return Collections.singletonList(nativeModule);
     }
 }

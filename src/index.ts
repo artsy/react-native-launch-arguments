@@ -6,32 +6,16 @@ const LINKING_ERROR =
   "- You rebuilt the app after installing the package\n" +
   "- You are not using Expo managed workflow\n";
 
-// @ts-expect-error
-const isTurboModuleEnabled = global.__turboModuleProxy != null;
-
-let LaunchArgumentsModule: any;
-
-try {
-  if (isTurboModuleEnabled) {
-    LaunchArgumentsModule = require("./NativeLaunchArguments").default;
-  } else {
-    LaunchArgumentsModule = NativeModules.LaunchArguments;
-  }
-} catch (error) {
-  // Fallback to legacy module if TurboModule fails
-  LaunchArgumentsModule = NativeModules.LaunchArguments;
-}
-
-if (!LaunchArgumentsModule) {
-  LaunchArgumentsModule = new Proxy(
-    {},
-    {
-      get() {
-        throw new Error(LINKING_ERROR);
-      },
-    }
-  );
-}
+const LaunchArgumentsModule = NativeModules.LaunchArguments
+  ? NativeModules.LaunchArguments
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
 
 type RawMap = Record<string, string>;
 
@@ -51,16 +35,7 @@ export const LaunchArguments: LaunchArgumentsType = {
 
     parsed = {};
 
-    const constants = isTurboModuleEnabled
-      ? LaunchArgumentsModule.getConstants()
-      : LaunchArgumentsModule.getConstants
-      ? LaunchArgumentsModule.getConstants()
-      : LaunchArgumentsModule;
-
-    const raw =
-      constants && constants.value
-        ? (constants.value as RawMap)
-        : (constants as RawMap);
+    const raw = LaunchArgumentsModule.value as RawMap;
 
     for (const k in raw) {
       const rawValue = raw[k];
