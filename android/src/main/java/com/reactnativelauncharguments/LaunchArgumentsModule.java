@@ -20,6 +20,8 @@ import androidx.annotation.Nullable;
 
 public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
 
+    public static final String NAME = "LaunchArguments";
+
     private static final long ACTIVITY_WAIT_INTERVAL = 100L;
     private static final int ACTIVITY_WAIT_TRIES = 200;
 
@@ -32,7 +34,7 @@ public class LaunchArgumentsModule extends ReactContextBaseJavaModule {
     @NonNull
     @Override
     public String getName() {
-        return "LaunchArguments";
+        return NAME;
     }
 
     @Nullable
