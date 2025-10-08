@@ -6,7 +6,12 @@ const LINKING_ERROR =
   "- You rebuilt the app after installing the package\n" +
   "- You are not using Expo managed workflow\n";
 
-const LaunchArgumentsModule = NativeModules.LaunchArguments
+// @ts-expect-error
+const isTurboModuleEnabled = global.__turboModuleProxy != null;
+
+const LaunchArgumentsModule = isTurboModuleEnabled
+  ? require('./NativeLaunchArguments').default
+  : NativeModules.LaunchArguments
   ? NativeModules.LaunchArguments
   : new Proxy(
       {},
@@ -35,7 +40,11 @@ export const LaunchArguments: LaunchArgumentsType = {
 
     parsed = {};
 
-    const raw = LaunchArgumentsModule.value as RawMap;
+    const constants = isTurboModuleEnabled
+      ? LaunchArgumentsModule.getConstants()
+      : LaunchArgumentsModule;
+
+    const raw = constants.value as RawMap;
 
     for (const k in raw) {
       const rawValue = raw[k];
