@@ -4,13 +4,11 @@
 
 RCT_EXPORT_MODULE()
 
-#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeLaunchArgumentsSpecJSI>(params);
 }
-#endif
 
 - (dispatch_queue_t)methodQueue
 {
@@ -114,13 +112,5 @@ RCT_EXPORT_MODULE()
 {
 	return [arg stringByReplacingOccurrencesOfString:@"-" withString:@""];
 }
-
-#ifdef RCT_NEW_ARCH_ENABLED
-- (facebook::react::ModuleConstants<JS::NativeLaunchArguments::Constants>)getConstants {
-    return facebook::react::typedConstants<JS::NativeLaunchArguments::Constants>({
-        .value = facebook::react::toDynamic([self argsToDictionary])
-    });
-}
-#endif
 
 @end
