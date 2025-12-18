@@ -20,9 +20,14 @@ RCT_EXPORT_MODULE()
 	return YES;
 }
 
-- (NSDictionary *)constantsToExport
-{
-	return @{@"value": [self argsToDictionary]};
+- (facebook::react::ModuleConstants<JS::NativeLaunchArguments::Constants::Builder>)getConstants {
+  return [self constantsToExport];
+}
+
+- (facebook::react::ModuleConstants<JS::NativeLaunchArguments::Constants::Builder>)constantsToExport {
+  return facebook::react::typedConstants<JS::NativeLaunchArguments::Constants::Builder>({
+    .value = [self argsToDictionary]
+  });
 }
 
 - (NSDictionary*)argsToDictionary{
