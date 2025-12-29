@@ -4,20 +4,11 @@
 
 RCT_EXPORT_MODULE()
 
+#ifdef RCT_NEW_ARCH_ENABLED
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params
 {
     return std::make_shared<facebook::react::NativeLaunchArgumentsSpecJSI>(params);
-}
-
-- (dispatch_queue_t)methodQueue
-{
-	return dispatch_get_main_queue();
-}
-
-+ (BOOL)requiresMainQueueSetup
-{
-	return YES;
 }
 
 - (facebook::react::ModuleConstants<JS::NativeLaunchArguments::Constants::Builder>)getConstants {
@@ -28,6 +19,21 @@ RCT_EXPORT_MODULE()
   return facebook::react::typedConstants<JS::NativeLaunchArguments::Constants::Builder>({
     .value = [self argsToDictionary]
   });
+}
+#else
+- (NSDictionary *)constantsToExport {
+  return @{@"value": [self argsToDictionary]};
+}
+#endif
+
+- (dispatch_queue_t)methodQueue
+{
+	return dispatch_get_main_queue();
+}
+
++ (BOOL)requiresMainQueueSetup
+{
+	return YES;
 }
 
 - (NSDictionary*)argsToDictionary{

@@ -1,4 +1,4 @@
-import { Platform } from "react-native";
+import { NativeModules, Platform } from "react-native";
 import NativeLaunchArguments, { Spec } from "./NativeLaunchArguments";
 
 const LINKING_ERROR =
@@ -9,6 +9,8 @@ const LINKING_ERROR =
 
 const LaunchArgumentsModule: Spec = (NativeLaunchArguments
   ? NativeLaunchArguments
+  : NativeModules.LaunchArguments
+  ? NativeModules.LaunchArguments
   : new Proxy(
       {},
       {
