@@ -7,4 +7,4 @@ export interface Spec extends TurboModule {
   };
 }
 
-export default TurboModuleRegistry.getEnforcing<Spec>('LaunchArguments');
+export default TurboModuleRegistry.get<Spec>('LaunchArguments');
